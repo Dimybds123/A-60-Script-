@@ -1,0 +1,86 @@
+---====== Load achievement giver ======---
+local achievementGiver = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Custom%20Achievements/Source.lua"))()
+
+---====== Define spawner ======---
+
+local Spawner = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Entity%20Spawner/V1/Source.lua"))()
+
+---====== Create entity ======---
+
+local entity = Spawner.createEntity({
+    CustomName = "A-60",
+    Model = "rbxassetid://15972282065", -- Your entity's model url here ("rbxassetid://1234567890" or GitHub raw url)
+    Speed = 200,
+    MoveDelay = 2,
+    HeightOffset = 0,
+    CanKill = true, -- true or false 
+    KillRange = 50,
+    SpawnInFront = false,
+    ShatterLights = true,
+    FlickerLights = {
+        Enabled = false,
+        Duration = 1
+    },
+    Cycles = {
+        Min = 1,
+        Max = 5,
+        Delay = 2
+    },
+    CamShake = {
+        Enabled = true,
+        Values = {3.5, 20, 0.1, 1},
+        Range = 167
+    },
+    ResistCrucifix = true,
+    BreakCrucifix = true,
+    DeathMessage = {"hello player", "You died to A-60", "He is very fast, hide as fast as possible!", "He returns five times at most.", "Good luck..."},
+    IsCuriousLight = true
+})
+
+---====== Debug ======---
+
+entity.Debug.OnEntitySpawned = function()
+    print("[{ Spam }] Entity has spawned")
+end
+
+entity.Debug.OnEntityDespawned = function()
+    print("Entity has despawned")
+    achievementGiver({
+    Title = "A-60",
+    Desc = "What is that thing coming over there?",
+    Reason = "Stay alive from the A-60!",
+    Image = "rbxassetid://0"
+})
+end
+
+entity.Debug.OnEntityStartMoving = function()
+    print(" [{ Spam }] Entity started moving")
+end
+
+entity.Debug.OnEntityFinishedRebound = function()
+    print(" [{ Spam }] Entity finished rebound")
+end
+
+entity.Debug.OnEntityEnteredRoom = function(room)
+    print("[{ Spam }] Entity entered room:", room)
+end
+
+entity.Debug.OnLookAtEntity = function()
+    print("[{ Spam }] Player looking at entity")
+end
+
+entity.Debug.OnDeath = function()
+    print("[{ Spam }] Player has died")
+end
+
+--[[
+    NOTE: By overwriting 'OnUseCrucifix', the default crucifixion will be ignored and this function will be called instead
+
+    entity.Debug.OnUseCrucifix = function()
+        print(" [{ Custom }]Custom crucifixion script here")
+    end
+]]--
+
+---====== Run entity ======---
+
+Spawner.runEntity(entity)
